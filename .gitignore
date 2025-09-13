@@ -1,20 +1,24 @@
-# Go
-/bin/
-/pkg/
-/vendor/
-/*.exe
+# Go build outputs
+/backend/urlsecure
+/backend/bin/
+/backend/vendor/
+/backend/*.exe
+/infra/infra-backend
+
+# Configuration and secrets
+/backend/.env
+/backend/.env.*
+/infra/.env
+/infra/.env.*
+
+# Node modules (if ever added)
+/frontend/node_modules/
+
+# Editor and OS files
+*.DS_Store
+.idea/
+.vscode/
 *.log
 
-# Node
-/node_modules/
-/public/styles.css
-
-# Environment
-.env
-
 # Docker
-docker-compose.override.yml
-
-# IDE
-.idea/
-*.iml
+**/mysql-data/
