@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/ConstantineCTF/URLSecure/backend/pkg/config"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 )
@@ -14,6 +15,17 @@ import (
 // NewRouter sets up routes with database and cache clients.
 func NewRouter(cfg *config.Config, db *sql.DB, rdb *redis.Client) *gin.Engine {
 	r := gin.New()
+
+	// Configure CORS to allow your frontend origin
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
 	r.Use(gin.Logger(), gin.Recovery())
 
 	// Health check
