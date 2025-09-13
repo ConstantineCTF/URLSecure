@@ -1,0 +1,20 @@
+# Go
+/bin/
+/pkg/
+/vendor/
+/*.exe
+*.log
+
+# Node
+/node_modules/
+/public/styles.css
+
+# Environment
+.env
+
+# Docker
+docker-compose.override.yml
+
+# IDE
+.idea/
+*.iml

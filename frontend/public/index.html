@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>URLSecure – Shorten URLs Securely</title>
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <div class="container mx-auto px-4 py-16 text-center">
+    <h1 class="text-4xl font-bold mb-4">URLSecure</h1>
+    <p class="text-lg mb-8">Shorten URLs in a click. Track clicks in real time.</p>
+    <form id="shorten-form" class="max-w-md mx-auto flex">
+      <input type="url" id="url-input" placeholder="Enter a long URL" required
+             class="flex-grow p-3 border border-gray-300 rounded-l-md focus:outline-none"/>
+      <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-r-md">
+        Shorten
+      </button>
+    </form>
+    <div id="result" class="mt-6"></div>
+  </div>
+  <script src="../src/main.js"></script>
+</body>
+</html>

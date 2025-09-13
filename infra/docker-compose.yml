@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_USER: shortener
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: shortener
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+
+  adminer:
+    image: adminer
+    ports:
+      - 8081:8080
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    environment:
+      APP_ENV: development
+      HTTP_PORT: 8080
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: shortener
+      DB_PASS: secret
+      DB_NAME: shortener
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+      - redis
+
+volumes:
+  mysql-data:
