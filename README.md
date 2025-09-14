@@ -1,42 +1,40 @@
-# URLSecure
+# URLSecure 🔗
 
-A secure, Go-based URL shortening service with Tailwind-powered frontend.
+A fast, secure, and analytics-driven URL shortener built with Go, MySQL, Redis, and modern web technologies.
 
-## Prerequisites
+## ✨ Features
 
-- Docker & Docker Compose  
-- Go 1.21+  
-- Node.js & NPM  
+- **🔐 User Authentication**: Secure JWT-based signup and login with username/email support
+- **⚡ URL Shortening**: Create custom short links with unique codes
+- **📊 Real-time Analytics**: Track clicks, referrers, locations, and devices
+- **🎯 QR Code Generation**: Automatic QR codes for every shortened URL
+- **🛡️ Security**: HTTPS by default, encrypted storage, DDoS protection
+- **📱 Responsive Design**: Mobile-first design with Tailwind CSS
+- **🔄 Custom Slugs**: Choose your own short URL identifiers
+- **⏰ Link Expiration**: Set expiry dates for temporary campaigns
+- **👤 User Dashboard**: Personal link management interface
 
-## Setup
+## 🚀 Technology Stack
 
-1. Copy environment variables:
-cp .env.example .env
+**Backend:**
+- Go (Gin framework)
+- MySQL (database)
+- Redis (caching)
+- JWT authentication
+- Docker & Docker Compose
 
-2. Start services:
-cd infra
-docker-compose up -d --build
+**Frontend:**
+- HTML5, CSS3, JavaScript (ES6+)
+- Tailwind CSS
+- QRCode.js library
 
+## 📋 Prerequisites
 
-3. Install frontend dependencies:
-cd frontend
-npm install
+- Docker & Docker Compose
+- Go 1.21+ (for local development)
+- MySQL 8.0+
+- Redis 7+
 
+## 🛠️ Installation & Setup
 
-4. Build Tailwind CSS:
-npm run build:css
-
-
-5. Open Adminer at http://localhost:8081 to verify MySQL.
-
-## Project Structure
-
-- **backend**: Go API service  
-- **frontend**: Static pages with Tailwind CSS  
-- **infra**: Docker Compose stack  
-
-## Next Steps
-
-- Define data models and migrations  
-- Implement API handlers and middleware  
-- Build frontend pages and integrate with API  
+1. **Clone the repository:**
