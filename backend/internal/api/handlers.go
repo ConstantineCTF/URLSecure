@@ -7,36 +7,35 @@ import (
 	"time"
 
 	"github.com/ConstantineCTF/URLSecure/backend/pkg/config"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 )
 
-// NewRouter sets up routes with database and cache clients.
 func NewRouter(cfg *config.Config, db *sql.DB, rdb *redis.Client) *gin.Engine {
 	r := gin.New()
-
-	// Configure CORS to allow your frontend origin
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
-		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-	}))
-
 	r.Use(gin.Logger(), gin.Recovery())
+
+	// Serve static assets under /assets
+	r.Static("/assets", "./public")
+
+	// SPA entry point
+	r.GET("/", func(c *gin.Context) {
+		c.File("./public/index.html")
+	})
 
 	// Health check
 	r.GET("/api/health", healthHandler)
 
-	apiGroup := r.Group("/api")
+	// API routes
+	api := r.Group("/api")
 	{
-		apiGroup.POST("/shorten", shortenHandler(db, rdb))
-		apiGroup.GET("/stats/:code", statsHandler(db))
+		api.POST("/shorten", shortenHandler(db, rdb))
+		api.GET("/stats/:code", statsHandler(db))
 	}
+
+	// Redirect handler
 	r.GET("/r/:code", redirectHandler(db, rdb))
+
 	return r
 }
 

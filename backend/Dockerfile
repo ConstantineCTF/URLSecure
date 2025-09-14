@@ -9,8 +9,17 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o urlsecure cmd/shortener/main.go
 # Stage 2: runtime
 FROM alpine:latest
 WORKDIR /root/
+
+# Copy binary
 COPY --from=builder /app/urlsecure .
+
+# Copy migrations
 COPY --from=builder /app/migrations ./migrations
+
+# Copy frontend static files
+COPY --from=builder /app/public ./public
+
+# Copy environment example as .env
 COPY --from=builder /app/.env.example .env
-EXPOSE 8080
+
 CMD ["./urlsecure"]

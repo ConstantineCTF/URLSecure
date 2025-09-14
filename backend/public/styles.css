@@ -1,0 +1,9 @@
+/* Tailwind Directives — run through PostCSS/Tailwind if you add a build step */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom overrides (optional) */
+body {
+  min-height: 100vh;
+}
