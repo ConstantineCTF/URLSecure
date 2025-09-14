@@ -2,22 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login – URLSecure</title>
-  <link href="/assets/styles.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Login • URLSecure</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="/assets/styles.css" rel="stylesheet"/>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-    <h2 class="text-2xl font-bold mb-6 text-center">Login to URLSecure</h2>
-    <form id="login-form">
-      <label class="block mb-2">Email</label>
-      <input type="email" required class="w-full p-3 border rounded-md mb-4"/>
-      <label class="block mb-2">Password</label>
-      <input type="password" required class="w-full p-3 border rounded-md mb-6"/>
-      <button type="submit" class="w-full py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-        Login
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+  <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold text-center mb-6 text-indigo-600">Welcome Back</h2>
+    <form id="login-form" class="space-y-4">
+      <div>
+        <label for="identifier" class="block text-sm font-medium text-gray-700">Username or Email</label>
+        <input id="identifier" name="identifier" type="text" required
+               class="mt-1 block w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"/>
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input id="password" name="password" type="password" required
+               class="mt-1 block w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"/>
+      </div>
+      <button type="submit"
+              class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition">
+        Log In
       </button>
+      <p class="text-center text-sm text-gray-600">
+        Don’t have an account?
+        <a href="/assets/signup.html" class="text-indigo-600 hover:underline">Sign up</a>
+      </p>
     </form>
+    <div id="login-error" class="mt-4 text-red-600 text-sm text-center"></div>
   </div>
+
+  <script>
+    const form = document.getElementById('login-form');
+    const errorEl = document.getElementById('login-error');
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      errorEl.textContent = '';
+
+      const identifier = form.identifier.value.trim();
+      const password   = form.password.value;
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier, password })
+        });
+        const data = await res.json();
+        if (res.ok && data.token) {
+          localStorage.setItem('token', data.token);
+          // Redirect to home
+          window.location.href = '/';
+        } else {
+          throw new Error(data.error || 'Login failed');
+        }
+      } catch (err) {
+        errorEl.textContent = err.message;
+      }
+    });
+  </script>
 </body>
 </html>

@@ -2,24 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign Up – URLSecure</title>
-  <link href="/assets/styles.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Sign Up • URLSecure</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="/assets/styles.css" rel="stylesheet"/>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-    <h2 class="text-2xl font-bold mb-6 text-center">Create an Account</h2>
-    <form id="signup-form">
-      <label class="block mb-2">Name</label>
-      <input type="text" required class="w-full p-3 border rounded-md mb-4"/>
-      <label class="block mb-2">Email</label>
-      <input type="email" required class="w-full p-3 border rounded-md mb-4"/>
-      <label class="block mb-2">Password</label>
-      <input type="password" required class="w-full p-3 border rounded-md mb-6"/>
-      <button type="submit" class="w-full py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+  <div class="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold text-center mb-6 text-indigo-600">Create Your Account</h2>
+    <form id="signup-form" class="space-y-4">
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+        <input id="username" name="username" type="text" required
+               class="mt-1 block w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"/>
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+        <input id="email" name="email" type="email" required
+               class="mt-1 block w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"/>
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input id="password" name="password" type="password" minlength="8" required
+               class="mt-1 block w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"/>
+        <p class="text-xs text-gray-500 mt-1">Minimum 8 characters</p>
+      </div>
+      <div>
+        <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+        <input id="confirm-password" name="confirm-password" type="password" required
+               class="mt-1 block w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"/>
+      </div>
+      <div class="flex items-center">
+        <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 text-indigo-600 rounded"/>
+        <label for="terms" class="ml-2 text-sm text-gray-700">
+          I agree to the <a href="#" class="text-indigo-600 hover:underline">Terms of Service</a>
+        </label>
+      </div>
+      <button type="submit"
+              class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition">
         Sign Up
       </button>
+      <p class="text-center text-sm text-gray-600">
+        Already have an account?
+        <a href="/assets/login.html" class="text-indigo-600 hover:underline">Log in</a>
+      </p>
     </form>
+    <div id="signup-error" class="mt-4 text-red-600 text-sm text-center"></div>
+    <div id="signup-success" class="mt-4 text-green-600 text-sm text-center"></div>
   </div>
+
+  <script>
+    const form      = document.getElementById('signup-form');
+    const errorEl   = document.getElementById('signup-error');
+    const successEl = document.getElementById('signup-success');
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      errorEl.textContent = '';
+      successEl.textContent = '';
+
+      const username = form.username.value.trim();
+      const email    = form.email.value.trim();
+      const password = form.password.value;
+      const confirm  = form['confirm-password'].value;
+
+      if (!username) {
+        errorEl.textContent = 'Username is required';
+        return;
+      }
+      if (password !== confirm) {
+        errorEl.textContent = 'Passwords do not match';
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password })
+        });
+        const data = await res.json();
+        if (res.status === 201 && data.token) {
+          successEl.textContent = 'Account created! Redirecting to login…';
+          setTimeout(() => window.location.href = '/assets/login.html', 1500);
+        } else {
+          throw new Error(data.error || 'Registration failed');
+        }
+      } catch (err) {
+        errorEl.textContent = err.message;
+      }
+    });
+  </script>
 </body>
 </html>

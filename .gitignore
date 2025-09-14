@@ -22,3 +22,32 @@
 
 # Docker
 **/mysql-data/
+
+
+# Binaries
+/bin/
+/obj/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Dependency directories
+/node_modules/
+
+# Environment files
+.env
+
+# Vendor (Go modules)
+/vendor/
+
+# Logs
+*.log
+
+# Compiled assets
+public/assets/*.js.map
+

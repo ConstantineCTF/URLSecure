@@ -3,25 +3,192 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>URLSecure</title>
-  <!-- Tailwind via CDN -->
+  <title>URLSecure -  Fast, Secure & Analytics-Driven URL Shortener</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="/assets/styles.css" rel="stylesheet">
 </head>
+<body class="bg-gray-50 text-gray-800 antialiased">
 
-<body class="bg-gray-100 text-gray-900">
-  <div class="container mx-auto px-4 py-16 text-center">
-    <h1 class="text-4xl font-bold mb-4">URLSecure</h1>
-    <p class="text-lg mb-8">Shorten URLs in a click. Track clicks in real time.</p>
-    <form id="shorten-form" class="max-w-md mx-auto flex">
-      <input type="url" id="url-input" placeholder="Enter a long URL" required
-             class="flex-grow p-3 border border-gray-300 rounded-l-md focus:outline-none"/>
-      <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-r-md">
-        Shorten
-      </button>
-    </form>
-    <div id="result" class="mt-6"></div>
-  </div>
+  <!-- Navbar -->
+  <header class="bg-white shadow-sm fixed w-full z-10">
+    <div class="container mx-auto flex items-center justify-between px-6 py-4">
+      <a href="/" class="text-2xl font-bold text-indigo-600">URLSecure</a>
+      <nav class="space-x-4 flex items-center">
+        <a href="#features" class="text-gray-600 hover:text-indigo-600 transition font-medium">Features</a>
+        <a href="#pricing" class="text-gray-600 hover:text-indigo-600 transition font-medium">Pricing</a>
+        <a href="#contact" class="text-gray-600 hover:text-indigo-600 transition font-medium">Contact</a>
+        <span id="unauth-links" class="inline-flex space-x-2">
+          <a href="/assets/login.html" class="px-4 py-2 text-sm font-medium text-indigo-600 border border-indigo-600 rounded hover:bg-indigo-50 transition">Login</a>
+          <a id="signup-btn" href="/assets/signup.html" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 transition">Sign Up</a>
+        </span>
+        <span id="auth-links" class="hidden inline-flex space-x-2">
+          <a href="/assets/profile.html" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 transition">Profile</a>
+          <a href="/assets/settings.html" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 transition">Settings</a>
+          <button id="logout-btn" class="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded hover:bg-red-100 transition">Logout</button>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="pt-24 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+    <div class="container mx-auto px-6 py-20 text-center">
+      <h1 class="text-5xl sm:text-6xl font-extrabold mb-4">Shorten. Share. Analyze.</h1>
+      <p class="text-xl sm:text-2xl mb-8">Create custom short links with real-time analytics, QR codes, and branded domains.</p>
+      <form id="shorten-form" class="max-w-xl mx-auto flex shadow-lg">
+        <input type="url" id="url-input" placeholder="Paste your URL here" required
+               class="flex-grow px-4 py-3 rounded-l-lg focus:outline-none text-gray-800"/>
+        <button type="submit" class="px-6 py-3 bg-white text-indigo-600 font-semibold rounded-r-lg hover:bg-gray-100 transition">Shorten</button>
+      </form>
+      <div id="result-card" class="mt-10 opacity-0 transition-opacity duration-500">
+        <div class="inline-flex items-center bg-white bg-opacity-90 backdrop-blur-lg rounded-full px-6 py-3 shadow-lg">
+          <a id="short-url" href="#" target="_blank" class="text-indigo-600 font-medium mr-4 hover:underline"></a>
+          <button id="copy-btn" class="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">Copy</button>
+          <div id="qrcode" class="ml-4"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="container mx-auto px-6 py-20">
+    <h2 class="text-3xl font-bold text-center mb-12">Powerful Features</h2>
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="p-6 bg-white rounded-lg shadow hover:shadow-lg transition">
+        <div class="text-indigo-600 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Custom Slugs</h3>
+        <p class="text-gray-600">Choose your own short URL identifiers for full branding control.</p>
+      </div>
+      <div class="p-6 bg-white rounded-lg shadow hover:shadow-lg transition">
+        <div class="text-indigo-600 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6M12 3v4"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Real-Time Analytics</h3>
+        <p class="text-gray-600">Monitor clicks, referrers, locations, and devices instantly.</p>
+      </div>
+      <div class="p-6 bg-white rounded-lg shadow hover:shadow-lg transition">
+        <div class="text-indigo-600 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Secure & Reliable</h3>
+        <p class="text-gray-600">Encrypted storage, HTTPS by default, and DDoS protection.</p>
+      </div>
+      <div class="p-6 bg-white rounded-lg shadow hover:shadow-lg transition">
+        <div class="text-indigo-600 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M12 8v4l3 3"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Link Expiration</h3>
+        <p class="text-gray-600">Set expiry dates or automatic deactivation rules for temporary campaigns.</p>
+      </div>
+      <div class="p-6 bg-white rounded-lg shadow hover:shadow-lg transition">
+        <div class="text-indigo-600 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M8 17l4 4 4-4m0-10l-4-4-4 4"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">QR Code Generator</h3>
+        <p class="text-gray-600">Generate scannable QR codes for every link automatically.</p>
+      </div>
+      <div class="p-6 bg-white rounded-lg shadow hover:shadow-lg transition">
+        <div class="text-indigo-600 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M12 8c1.657 0 3-1.343 3-3S13.657 2 12 2 9 3.343 9 5s1.343 3 3 3z"/>
+            <path d="M12 14c-4.418 0-8 1.79-8 4v2h16v-2c0-2.21-3.582-4-8-4z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">User Accounts</h3>
+        <p class="text-gray-600">Secure registration, login, and personal link management dashboard.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section id="pricing" class="bg-indigo-50 py-20">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-6">Get Started Today</h2>
+      <p class="text-gray-700 mb-8">Free forever for basic features. Upgrade anytime for advanced analytics and custom domains.</p>
+      <a id="cta-signup" href="/assets/signup.html" class="px-8 py-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition">Sign Up Free</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="bg-white border-t py-8">
+    <div class="container mx-auto px-6 text-center text-gray-600">
+      <p>Questions? Email <a href="mailto:support@urlsecure.com" class="text-indigo-600 hover:underline">support@urlsecure.com</a></p>
+      <p class="mt-4 text-sm">&copy; 2025 URLSecure. All rights reserved.</p>
+    </div>
+  </footer>
+
   <script src="/assets/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const unauth = document.getElementById('unauth-links');
+      const auth   = document.getElementById('auth-links');
+      if (token) {
+        unauth.classList.add('hidden');
+        auth.classList.remove('hidden');
+        document.getElementById('signup-btn')?.remove();
+        document.getElementById('cta-signup')?.remove();
+      } else {
+        auth.classList.add('hidden');
+      }
+      document.getElementById('logout-btn')?.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+      });
+    });
+
+    document.getElementById('shorten-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const token      = localStorage.getItem('token');
+      if (!token) return window.location.href = '/assets/login.html';
+
+      const resultCard = document.getElementById('result-card');
+      const urlAnchor  = document.getElementById('short-url');
+      const copyBtn    = document.getElementById('copy-btn');
+      const qrContainer= document.getElementById('qrcode');
+
+      const urlValue = document.getElementById('url-input').value.trim();
+      const res = await fetch('/api/shorten', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ url: urlValue })
+      });
+      const data = await res.json();
+      const shortLink = `${window.location.origin}/r/${data.code}`;
+
+      urlAnchor.textContent = shortLink;
+      urlAnchor.href = shortLink;
+      qrContainer.innerHTML = '';
+      new QRCode(qrContainer, { text: shortLink, width: 64, height: 64, colorDark: '#1F2937', colorLight: '#FFFFFF', correctLevel: QRCode.CorrectLevel.H });
+
+      setTimeout(() => {
+        resultCard.classList.remove('opacity-0');
+        resultCard.classList.add('opacity-100');
+      }, 50);
+
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(shortLink)
+          .then(() => copyBtn.textContent = 'Copied!')
+          .catch(() => copyBtn.textContent = 'Failed');
+        setTimeout(() => copyBtn.textContent = 'Copy', 2000);
+      };
+    });
+  </script>
 </body>
 </html>

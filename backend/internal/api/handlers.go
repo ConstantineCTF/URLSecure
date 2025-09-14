@@ -15,26 +15,16 @@ func NewRouter(cfg *config.Config, db *sql.DB, rdb *redis.Client) *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery())
 
-	// Serve static assets under /assets
+	// Static files & SPA
 	r.Static("/assets", "./public")
+	r.GET("/", func(c *gin.Context) { c.File("./public/index.html") })
 
-	// SPA entry point
-	r.GET("/", func(c *gin.Context) {
-		c.File("./public/index.html")
-	})
-
-	// Health check
+	// Health, redirect, etc.
 	r.GET("/api/health", healthHandler)
-
-	// API routes
-	api := r.Group("/api")
-	{
-		api.POST("/shorten", shortenHandler(db, rdb))
-		api.GET("/stats/:code", statsHandler(db))
-	}
-
-	// Redirect handler
 	r.GET("/r/:code", redirectHandler(db, rdb))
+
+	// Register auth & protected API routes
+	RegisterRoutes(r, db, rdb)
 
 	return r
 }
