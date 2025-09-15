@@ -3,10 +3,10 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_USER: shortener
-      MYSQL_PASSWORD: secret
-      MYSQL_DATABASE: shortener
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
     ports:
       - "3306:3306"
     volumes:
@@ -18,44 +18,40 @@ services:
     ports:
       - "6379:6379"
 
-  adminer:
-    image: adminer:latest
-    restart: unless-stopped
-    ports:
-      - "8081:8080"
-
   backend:
     build:
       context: ../backend
       dockerfile: Dockerfile
     restart: unless-stopped
+
+    env_file:
+      - ./.env    # Assuming infra/.env
+
     environment:
-      APP_ENV: development
-      HTTP_PORT: 8080
+      APP_ENV: ${APP_ENV}
+      HTTP_PORT: ${HTTP_PORT}
 
       # MySQL
       DB_HOST: mysql
-      DB_PORT: 3306
-      DB_USER: shortener
-      DB_PASS: secret
-      DB_NAME: shortener
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
 
       # Redis
       REDIS_HOST: redis
-      REDIS_PORT: 6379
+      REDIS_PORT: ${REDIS_PORT}
 
       # Security & Rate Limiting
-      JWT_SECRET: StzoBbz5NqyJprT4fBa9CpEqdUMtb9v1kNC7lfPlAdc=
-      RATE_LIMIT_REQUESTS: 100
-      RATE_LIMIT_WINDOW: 60
+      JWT_SECRET: ${JWT_SECRET}
+      RATE_LIMIT_REQUESTS: ${RATE_LIMIT_REQUESTS}
+      RATE_LIMIT_WINDOW: ${RATE_LIMIT_WINDOW}
 
     ports:
       - "8080:8080"
     depends_on:
       - mysql
       - redis
-    volumes:
-      - ../backend/.env:/root/.env
 
 volumes:
   mysql-data:
