@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>URLSecure -  Fast, Secure & Analytics-Driven URL Shortener</title>
+  <title>URLSecure • Fast, Secure & Analytics-Driven URL Shortener</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="/assets/styles.css" rel="stylesheet">
 </head>
@@ -36,8 +36,7 @@
       <h1 class="text-5xl sm:text-6xl font-extrabold mb-4">Shorten. Share. Analyze.</h1>
       <p class="text-xl sm:text-2xl mb-8">Create custom short links with real-time analytics, QR codes, and branded domains.</p>
       <form id="shorten-form" class="max-w-xl mx-auto flex shadow-lg">
-        <input type="url" id="url-input" placeholder="Paste your URL here" required
-               class="flex-grow px-4 py-3 rounded-l-lg focus:outline-none text-gray-800"/>
+        <input type="url" id="url-input" placeholder="Paste your URL here" required class="flex-grow px-4 py-3 rounded-l-lg focus:outline-none text-gray-800"/>
         <button type="submit" class="px-6 py-3 bg-white text-indigo-600 font-semibold rounded-r-lg hover:bg-gray-100 transition">Shorten</button>
       </form>
       <div id="result-card" class="mt-10 opacity-0 transition-opacity duration-500">
@@ -103,7 +102,7 @@
         <div class="text-indigo-600 mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path d="M12 8c1.657 0 3-1.343 3-3S13.657 2 12 2 9 3.343 9 5s1.343 3 3 3z"/>
-            <path d="M12 14c-4.418 0-8 1.79-8 4v2h16v-2c0-2.21-3.582-4-8-4z"/>
+            <path d="M12 14c-4.418 0-8 1.79-8 4v2h16 v-2c0-2.21-3.582-4-8-4z"/>
           </svg>
         </div>
         <h3 class="text-xl font-semibold mb-2">User Accounts</h3>
@@ -112,19 +111,22 @@
     </div>
   </section>
 
-  <!-- Call to Action -->
+  <!-- Call to Action / Pricing Section -->
   <section id="pricing" class="bg-indigo-50 py-20">
     <div class="container mx-auto px-6 text-center">
       <h2 class="text-3xl font-bold mb-6">Get Started Today</h2>
-      <p class="text-gray-700 mb-8">Free forever for basic features. Upgrade anytime for advanced analytics and custom domains.</p>
-      <a id="cta-signup" href="/assets/signup.html" class="px-8 py-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition">Sign Up Free</a>
+      <p class="text-gray-700 mb-8">Free forever for core features. If you’d like to support development, consider a donation!</p>
+      <div class="inline-flex space-x-4">
+        <a id="cta-signup" href="/assets/signup.html" class="px-8 py-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition">Sign Up Free</a>
+        <a href="https://buymeacoffee.com/constantinectf" class="px-8 py-4 border-2 border-indigo-600 text-indigo-600 font-semibold rounded-lg hover:bg-indigo-600 hover:text-white transition">Donate</a>
+      </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- Footer / Contact Section -->
   <footer id="contact" class="bg-white border-t py-8">
     <div class="container mx-auto px-6 text-center text-gray-600">
-      <p>Questions? Email <a href="mailto:support@urlsecure.com" class="text-indigo-600 hover:underline">support@urlsecure.com</a></p>
+      <p>Questions? Email <a href="mailto:constantine.ctf@proton.me" class="text-indigo-600 hover:underline">constantine.ctf@proton.me</a></p>
       <p class="mt-4 text-sm">&copy; 2025 URLSecure. All rights reserved.</p>
     </div>
   </footer>
@@ -133,61 +135,97 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const token = localStorage.getItem('token');
-      const unauth = document.getElementById('unauth-links');
-      const auth   = document.getElementById('auth-links');
+      // Navbar auth toggle
+      const token     = localStorage.getItem('token');
+      const unauth    = document.getElementById('unauth-links');
+      const auth      = document.getElementById('auth-links');
+      const signupNav = document.getElementById('signup-btn');
+      const signupCTA = document.getElementById('cta-signup');
+
       if (token) {
-        unauth.classList.add('hidden');
-        auth.classList.remove('hidden');
-        document.getElementById('signup-btn')?.remove();
-        document.getElementById('cta-signup')?.remove();
+        unauth?.classList.add('hidden');
+        auth?.classList.remove('hidden');
+        signupNav?.remove();
+        signupCTA?.remove();
       } else {
-        auth.classList.add('hidden');
+        auth?.classList.add('hidden');
       }
+
       document.getElementById('logout-btn')?.addEventListener('click', () => {
         localStorage.removeItem('token');
         window.location.href = '/';
       });
-    });
 
-    document.getElementById('shorten-form').addEventListener('submit', async e => {
-      e.preventDefault();
-      const token      = localStorage.getItem('token');
-      if (!token) return window.location.href = '/assets/login.html';
-
+      // Shorten form handling
+      const form       = document.getElementById('shorten-form');
       const resultCard = document.getElementById('result-card');
       const urlAnchor  = document.getElementById('short-url');
       const copyBtn    = document.getElementById('copy-btn');
       const qrContainer= document.getElementById('qrcode');
 
-      const urlValue = document.getElementById('url-input').value.trim();
-      const res = await fetch('/api/shorten', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ url: urlValue })
+      form?.addEventListener('submit', async e => {
+        e.preventDefault();
+
+        // 1. Grab and log token
+        const token = localStorage.getItem('token');
+        console.log('Using token:', token);
+        if (!token) {
+          window.location.href = '/assets/login.html';
+          return;
+        }
+
+        // 2. Get URL
+        const urlValue = document.getElementById('url-input').value.trim();
+        if (!urlValue) return;
+
+        // 3. Call API
+        const endpoint = `${window.location.origin}/api/shorten`;
+        console.log('POST', endpoint, { url: urlValue });
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ url: urlValue })
+        });
+        console.log('Response status:', res.status);
+        const data = await res.json();
+        console.log('Response JSON:', data);
+
+        if (!res.ok) {
+          alert(data.error || `Error: ${res.status}`);
+          return;
+        }
+
+        // 4. Display result
+        const shortLink = `${window.location.origin}/r/${data.code}`;
+        urlAnchor.textContent = shortLink;
+        urlAnchor.href = shortLink;
+
+        qrContainer.innerHTML = '';
+        new QRCode(qrContainer, {
+          text: shortLink,
+          width: 64,
+          height: 64,
+          colorDark: '#1F2937',
+          colorLight: '#FFFFFF',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // show card
+        setTimeout(() => {
+          resultCard.classList.remove('opacity-0');
+          resultCard.classList.add('opacity-100');
+        }, 50);
+
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(shortLink)
+            .then(() => copyBtn.textContent = 'Copied!')
+            .catch(() => copyBtn.textContent = 'Failed');
+          setTimeout(() => copyBtn.textContent = 'Copy', 2000);
+        };
       });
-      const data = await res.json();
-      const shortLink = `${window.location.origin}/r/${data.code}`;
-
-      urlAnchor.textContent = shortLink;
-      urlAnchor.href = shortLink;
-      qrContainer.innerHTML = '';
-      new QRCode(qrContainer, { text: shortLink, width: 64, height: 64, colorDark: '#1F2937', colorLight: '#FFFFFF', correctLevel: QRCode.CorrectLevel.H });
-
-      setTimeout(() => {
-        resultCard.classList.remove('opacity-0');
-        resultCard.classList.add('opacity-100');
-      }, 50);
-
-      copyBtn.onclick = () => {
-        navigator.clipboard.writeText(shortLink)
-          .then(() => copyBtn.textContent = 'Copied!')
-          .catch(() => copyBtn.textContent = 'Failed');
-        setTimeout(() => copyBtn.textContent = 'Copy', 2000);
-      };
     });
   </script>
 </body>

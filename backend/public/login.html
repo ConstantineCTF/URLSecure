@@ -33,35 +33,34 @@
     <div id="login-error" class="mt-4 text-red-600 text-sm text-center"></div>
   </div>
 
-  <script>
-    const form = document.getElementById('login-form');
-    const errorEl = document.getElementById('login-error');
+<script>
+  const form = document.getElementById('login-form');
+  const errorEl = document.getElementById('login-error');
 
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      errorEl.textContent = '';
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    errorEl.textContent = '';
 
-      const identifier = form.identifier.value.trim();
-      const password   = form.password.value;
+    const identifier = document.getElementById('identifier').value.trim();
+    const password   = document.getElementById('password').value;
 
-      try {
-        const res = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ identifier, password })
-        });
-        const data = await res.json();
-        if (res.ok && data.token) {
-          localStorage.setItem('token', data.token);
-          // Redirect to home
-          window.location.href = '/';
-        } else {
-          throw new Error(data.error || 'Login failed');
-        }
-      } catch (err) {
-        errorEl.textContent = err.message;
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier, password })
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        localStorage.setItem('token', data.token);
+        window.location.href = '/';
+      } else {
+        throw new Error(data.error || 'Login failed');
       }
-    });
-  </script>
+    } catch (err) {
+      errorEl.textContent = err.message;
+    }
+  });
+</script>
 </body>
 </html>
