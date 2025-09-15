@@ -1,53 +1,30 @@
-# Go build outputs
-/backend/urlsecure
-/backend/bin/
-/backend/vendor/
-/backend/*.exe
-/infra/infra-backend
-
-# Configuration and secrets
+# Environment files
 /backend/.env
 /backend/.env.*
 /infra/.env
 /infra/.env.*
 
-# Node modules (if ever added)
-/frontend/node_modules/
+# Go build outputs and vendor
+/backend/urlsecure
+/backend/bin/
+/backend/vendor/
+/vendor/
+
+# Docker volumes and data
+**/mysql-data/
 
 # Editor and OS files
 *.DS_Store
+Thumbs.db
 .idea/
 .vscode/
 *.log
 
-# Docker
-**/mysql-data/
-
-
-# Binaries
-/bin/
-/obj/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# IDE files
-.vscode/
-.idea/
-
-# Dependency directories
-/node_modules/
-
-# Environment files
-.env
-
-# Vendor (Go modules)
-/vendor/
+# Node modules (if you add frontend dependencies)
+node_modules/
 
 # Logs
 *.log
 
-# Compiled assets
+# Compiled assets source maps
 public/assets/*.js.map
-
