@@ -32,18 +32,30 @@ services:
     environment:
       APP_ENV: development
       HTTP_PORT: 8080
+
+      # MySQL
       DB_HOST: mysql
       DB_PORT: 3306
       DB_USER: shortener
       DB_PASS: secret
       DB_NAME: shortener
+
+      # Redis
       REDIS_HOST: redis
       REDIS_PORT: 6379
+
+      # Security & Rate Limiting
+      JWT_SECRET: StzoBbz5NqyJprT4fBa9CpEqdUMtb9v1kNC7lfPlAdc=
+      RATE_LIMIT_REQUESTS: 100
+      RATE_LIMIT_WINDOW: 60
+
     ports:
       - "8080:8080"
     depends_on:
       - mysql
       - redis
+    volumes:
+      - ../backend/.env:/root/.env
 
 volumes:
   mysql-data:

@@ -19,7 +19,5 @@ COPY --from=builder /app/migrations ./migrations
 # Copy frontend static files
 COPY --from=builder /app/public ./public
 
-# Copy environment example as .env
-COPY --from=builder /app/.env.example .env
 
 CMD ["./urlsecure"]

@@ -9,7 +9,8 @@
 <body class="bg-gray-100 text-gray-900">
   <nav class="bg-white shadow p-4 flex justify-between">
     <a href="/" class="font-bold text-xl">URLSecure</a>
-    <a href="/logout" class="text-indigo-600 hover:underline">Logout</a>
+    <!-- Changed logout href to "#" to handle logout in JS -->
+    <a href="#" id="logout-link" class="text-indigo-600 hover:underline">Logout</a>
   </nav>
   <main class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-6">Your Links</h1>
@@ -18,5 +19,13 @@
     </div>
   </main>
   <script src="/assets/main.js"></script>
+  <script>
+    // Handle logout via JavaScript
+    document.getElementById('logout-link').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('authToken');
+      window.location.href = '/assets/login.html';
+    });
+  </script>
 </body>
 </html>
