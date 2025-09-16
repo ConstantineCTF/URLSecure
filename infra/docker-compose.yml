@@ -2,19 +2,27 @@ services:
   mysql:
     image: mysql:8.0
     restart: unless-stopped
+
+    # MySQL environment variables set from .env via variables substitution
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASS}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
       MYSQL_DATABASE: ${DB_NAME}
+
+    # Bind container port 3306 to host
     ports:
       - "3306:3306"
+
+    # Persist MySQL data in named volume
     volumes:
       - mysql-data:/var/lib/mysql
 
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+
+    # Bind Redis port
     ports:
       - "6379:6379"
 
@@ -22,36 +30,43 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
+
     restart: unless-stopped
 
+    # Load environment variables from infra/.env file
     env_file:
-      - ./.env    # Assuming infra/.env
+      - ./.env
 
+    # Environment variables passed individually, mostly sourced from .env variables
     environment:
       APP_ENV: ${APP_ENV}
       HTTP_PORT: ${HTTP_PORT}
 
-      # MySQL
+      # MySQL connection config - use service name 'mysql' for Docker network
       DB_HOST: mysql
       DB_PORT: ${DB_PORT}
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       DB_NAME: ${DB_NAME}
 
-      # Redis
+      # Redis connection config - use service name 'redis'
       REDIS_HOST: redis
       REDIS_PORT: ${REDIS_PORT}
 
-      # Security & Rate Limiting
+      # Security & rate limiting
       JWT_SECRET: ${JWT_SECRET}
       RATE_LIMIT_REQUESTS: ${RATE_LIMIT_REQUESTS}
       RATE_LIMIT_WINDOW: ${RATE_LIMIT_WINDOW}
 
+    # Map port 8080 inside container to host 8080
     ports:
       - "8080:8080"
+
+    # Ensure these dependencies start first
     depends_on:
       - mysql
       - redis
 
 volumes:
+  # Named Docker volume for MySQL data persistence
   mysql-data:
