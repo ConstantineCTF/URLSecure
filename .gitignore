@@ -1,30 +1,27 @@
-# Environment files
+# Environment files to ignore local configs and secrets
 /backend/.env
 /backend/.env.*
 /infra/.env
 /infra/.env.*
 
-# Go build outputs and vendor
+# Go build output binaries and vendor directories
 /backend/urlsecure
 /backend/bin/
 /backend/vendor/
 /vendor/
 
-# Docker volumes and data
+# Docker managed volumes and data folders
 **/mysql-data/
 
-# Editor and OS files
+# Common editor and OS metadata, logs
 *.DS_Store
 Thumbs.db
 .idea/
 .vscode/
 *.log
 
-# Node modules (if you add frontend dependencies)
+# Frontend dependencies folder (node modules)
 node_modules/
 
-# Logs
-*.log
-
-# Compiled assets source maps
+# Compiled frontend sourcemaps for assets
 public/assets/*.js.map
