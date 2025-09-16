@@ -1,4 +1,3 @@
-***
 # URLSecure
 
 URLSecure is a high-performance, secure URL shortening service built with Go, MySQL, and Redis. It offers user authentication, customizable short URLs, QR code generation, and a responsive user interface for seamless access and management.
@@ -129,5 +128,3 @@ Contributions are welcome! Feel free to submit issues or pull requests. Please a
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-***
