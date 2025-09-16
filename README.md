@@ -1,122 +1,133 @@
+***
 # URLSecure
 
-URLSecure is a fast, secure, and analytics-driven URL shortening service built with Go, MySQL, Redis, and modern web technologies. It provides user authentication, customizable short URLs, real-time analytics, and a responsive design for seamless user experience.
+URLSecure is a high-performance, secure URL shortening service built with Go, MySQL, and Redis. It offers user authentication, customizable short URLs, QR code generation, and a responsive user interface for seamless access and management.
 
----
+***
 
 ## Features
 
-- User Authentication with JWT-based signup and login using username or email.
-- URL Shortening with support for custom short codes.
-- Real-time Analytics to track clicks, referrers, geographical locations, and device types.
-- QR Code Generation for every shortened URL.
-- Security features including HTTPS enforcement, encrypted data storage, and protection against common attacks.
-- Responsive, mobile-first UI built with Tailwind CSS.
-- Link Expiration allowing users to set expiry dates for temporary URLs.
-- User Dashboard for personal link management and analytics.
+- JWT-based user authentication allowing signup and login using username or email.  
+- Simple and efficient URL shortening with unique short codes.  
+- QR Code generation for every shortened URL.  
+- Secure design with encrypted data storage and protection against common web threats.  
+- Mobile-first responsive UI styled with Tailwind CSS.
 
----
+***
 
 ## Technology Stack
 
-### Backend
+**Backend**  
+- Go programming language with Gin web framework for RESTful APIs.  
+- MySQL relational database for persistent storage.  
+- Redis for caching and rate limiting to improve performance.  
+- JSON Web Tokens (JWT) for authentication.  
+- Docker and Docker Compose for containerized development and deployment.
 
-- Go programming language using Gin web framework.
-- MySQL relational database.
-- Redis for caching and rate limiting.
-- JWT for secure authentication.
-- Docker and Docker Compose for containerization and orchestration.
+**Frontend**  
+- Modern HTML5, CSS3, and ES6+ JavaScript.  
+- Tailwind CSS for rapid UI development.  
+- QRCode.js for client-side QR code rendering.
 
-### Frontend
-
-- HTML5, CSS3, and modern JavaScript (ES6+).
-- Tailwind CSS for styling.
-- QRCode.js library for QR code generation.
-
----
+***
 
 ## Prerequisites
 
-- Docker and Docker Compose installed.
-- Go version 1.21 or later (for local development).
-- MySQL 8.0 or later.
-- Redis 7 or later.
+- Docker and Docker Compose (recommended for easy setup).  
+- Go 1.21+ (required for development and manual run).  
+- MySQL 8.0+ and Redis 7+ databases.
 
----
+***
 
 ## Installation and Setup
 
-1. Clone the repository:
+### Clone Repository
 
-    ```
-    git clone https://github.com/ConstantineCTF/URLSecure
-    cd URLSecure
-    ```
+```bash
+git clone https://github.com/ConstantineCTF/URLSecure
+cd URLSecure
+```
 
-2. Configure environment variables:
+### Configure Environment Variables
 
-    Copy the example environment file and update it with your configuration:
+Create a `.env` file inside the `backend/` directory with the following variables, updated with your own settings:
 
-    ```
-    cp backend/.env.example backend/.env
-    # Edit backend/.env with your settings
-    ```
+```ini
+APP_ENV=development
+HTTP_PORT=8080
 
-3. Start the required services:
+DB_HOST=mysql
+DB_PORT=3306
+DB_USER=shortener
+DB_PASS=YourDatabasePassword
+DB_NAME=shortener
 
-    ```
-    cd infra
-    docker-compose up -d mysql redis
-    ```
+REDIS_HOST=redis
+REDIS_PORT=6379
 
-4. Build and launch the backend service:
+JWT_SECRET=YourJWTSecretKey
+RATE_LIMIT_REQUESTS=100
+RATE_LIMIT_WINDOW=60
+```
 
-    - Using Docker Compose:
+### Start Infrastructure Services
 
-      ```
-      docker-compose build backend
-      docker-compose up -d backend
-      ```
+```bash
+cd infra
+docker-compose up -d mysql redis
+```
 
-    - Or run locally for development:
+### Build and Run Backend
 
-      ```
-      cd backend
-      go run cmd/shortener/main.go
-      ```
+- Using Docker Compose:
 
-5. Open your browser and navigate to:
+```bash
+docker-compose build backend
+docker-compose up -d backend
+```
 
-    ```
-    http://localhost:8080
-    ```
+- Or running manually for development:
 
----
+```bash
+cd backend
+go run cmd/shortener/main.go
+```
+
+### Access the Application
+
+Open your browser to:
+
+```
+http://localhost:8080
+```
+
+***
 
 ## Project Structure
 
 ```
-/backend         Backend Go source code, configuration files, and database migrations
-/backend/public  Static frontend assets including HTML, CSS, and JavaScript
-/infra           Docker Compose configuration and infrastructure files
+/backend         Backend Go source and migrations
+/backend/public  Frontend static assets (HTML, CSS, JS)
+/infra           Docker Compose configs and infrastructure setup
 ```
 
----
+***
 
 ## Usage
 
-- Register and log in to create and manage shortened URLs.
-- Access detailed analytics about link usage.
-- Generate QR codes for sharing URLs offline.
+- Register and login to create and manage your short URLs.  
+- Generate QR codes for easy offline sharing.
 
----
+***
 
 ## Contributing
 
-Contributions are welcome. Please submit issues and pull requests on GitHub. Follow standard Go coding practices and Tailwind CSS conventions.
+Contributions are welcome! Feel free to submit issues or pull requests. Please adhere to Go coding conventions and Tailwind CSS best practices.
 
----
+***
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+***
