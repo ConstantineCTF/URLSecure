@@ -4,6 +4,12 @@ URLSecure is a high-performance, secure URL shortening service built with Go, My
 
 ***
 
+## Current Status
+
+The URLSecure service is fully deployed and accessible. Users can register, log in, create, manage, and use shortened URLs with real-time analytics and QR code generation. Generated URLs properly redirect to their original destinations.
+
+***
+
 ## Features
 
 - JWT-based user authentication allowing signup and login using username or email.  
@@ -54,16 +60,13 @@ Create a `.env` file inside the `backend/` directory with the following variable
 ```ini
 APP_ENV=development
 HTTP_PORT=8080
-
 DB_HOST=mysql
 DB_PORT=3306
 DB_USER=shortener
 DB_PASS=YourDatabasePassword
 DB_NAME=shortener
-
 REDIS_HOST=redis
 REDIS_PORT=6379
-
 JWT_SECRET=YourJWTSecretKey
 RATE_LIMIT_REQUESTS=100
 RATE_LIMIT_WINDOW=60
@@ -114,7 +117,7 @@ http://localhost:8080
 
 ## Usage
 
-- Register and login to create and manage your short URLs.  
+- Register and log in to create and manage your short URLs.  
 - Generate QR codes for easy offline sharing.
 
 ***
