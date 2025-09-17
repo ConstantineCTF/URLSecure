@@ -52,8 +52,8 @@
       });
       const data = await res.json();
       if (res.ok && data.token) {
-          localStorage.setItem('authToken', data.token);
-          window.location.href = '/assets/dashboard.html';
+          localStorage.setItem('token', data.token);
+          window.location.href = '/';
       } else {
         throw new Error(data.error || 'Login failed');
       }
