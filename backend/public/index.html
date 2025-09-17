@@ -218,11 +218,26 @@
           resultCard.classList.remove('opacity-0');
           resultCard.classList.add('opacity-100');
         }, 50);
-
+        
         copyBtn.onclick = () => {
-          navigator.clipboard.writeText(shortLink)
-            .then(() => copyBtn.textContent = 'Copied!')
-            .catch(() => copyBtn.textContent = 'Failed');
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(shortLink)
+              .then(() => copyBtn.textContent = 'Copied!')
+              .catch(() => copyBtn.textContent = 'Failed');
+          } else {
+            // Fallback for unsupported browsers
+            const textarea = document.createElement('textarea');
+            textarea.value = shortLink;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+              document.execCommand('copy');
+              copyBtn.textContent = 'Copied!';
+            } catch {
+              copyBtn.textContent = 'Failed';
+            }
+            document.body.removeChild(textarea);
+          }
           setTimeout(() => copyBtn.textContent = 'Copy', 2000);
         };
       });
